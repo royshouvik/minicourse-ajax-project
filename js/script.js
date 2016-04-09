@@ -23,9 +23,18 @@ function loadData() {
 
     // YOUR CODE GOES HERE!
     var apiKey = "f21d18859a8ac5580762c0b398902228:1:74961864";
-    var NYTimesURL = "http://api.nytimes.com/svc/search/v2/articlesearch.response-format?api-key=" + apiKey + '"';
+    var NYTimesURL = "http://api.nytimes.com/svc/search/v2/articlesearch.json?api-key=" + apiKey + "&q=" + location + "&fl=headline,lead_paragraph,web_url";
     $.getJSON(NYTimesURL, function(data){
-        console.log(data);
+        data.docs.forEach(function(elm) {
+            var headline = elm.headline.main;
+            var lead_paragraph = elm.lead_paragraph;
+            var url = elm.web_url;
+            var anchor = '<a href="' + url + '">' + headline + '</a>';
+            var paragraph = '<p>' + lead_paragraph + '</p>';
+            var item = '<li class="article"'> + anchor + paragraph + '</li>';
+            $nytElem.append(item);
+
+        });
     });
 
     return false;
